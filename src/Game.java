@@ -1,8 +1,14 @@
 public class Game {
 
     public static void main(String[] args){
-        Position p = new Position(3, 5);
-        System.out.println(p);
+
+        try {
+            Position p = new Position(1, -1);
+            System.out.println(p);
+        } catch (InvalidPositionException e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
 }
