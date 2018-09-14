@@ -1,17 +1,30 @@
 import javafx.geometry.Pos;
 
+import java.util.ArrayList;
+
 public class Board {
 
-    private char[][] board = {{'7','8',' ','9',' ','3',' ','5','6'},
-                              {'1',' ',' ',' ',' ',' ',' ',' ','3'},
-                              {' ',' ',' ','4',' ','2',' ',' ',' '},
-                              {' ','7',' ',' ',' ',' ',' ','6',' '},
-                              {'5','6',' ','2','9','8',' ','3','7'},
-                              {' ','1',' ',' ',' ',' ',' ','9',' '},
-                              {' ',' ',' ','6',' ','7',' ',' ',' '},
-                              {'9',' ',' ',' ',' ',' ',' ',' ','1'},
-                              {'8','3',' ','1',' ','9',' ','7','5'},};
+    private char[][] board = {{'6','1',' ',' ',' ',' ',' ',' ',' '},
+                              {' ','4','8',' ','5','3','1',' ','2'},
+                              {' ',' ','3',' ','8',' ',' ','4','5'},
+                              {'4',' ',' ',' ','9',' ','5',' ','6'},
+                              {' ','5','7',' ','3',' ','2',' ',' '},
+                              {'3',' ',' ','5',' ','8',' ','1',' '},
+                              {' ','3','9',' ',' ',' ','6','2','1'},
+                              {'7','2',' ',' ','6','5','3',' ',' '},
+                              {'8',' ','4','3',' ','2',' ','5','9'},};
 
+    /*
+    private char[][] board = {{'1','3','2','5','6','7','9','4','8'},
+                              {'5','4','6','3','8','9','2','1','7'},
+                              {'9','7','8','2','4','1','6','3','5'},
+                              {'2','6','4','9','1','8','7','5','3'},
+                              {'7','1','5','6','3','2','8','9','4'},
+                              {'3','8','9','4','7','5','1','2','6'},
+                              {'8','5','7','1','2','3','4','6','9'},
+                              {'6','9','1','7','5','4','3','8','2'},
+                              {'4','2','3','8','9','6',' ',' ','1'},};
+    */
 
     public void makeMove(Move move){
         if(isValid(move)){
@@ -19,8 +32,61 @@ public class Board {
         }
     }
 
+    public boolean solve(){
+
+        Position emptyCell = null;
+
+        //Find first empty cell
+        for(int i=0; i<9; i++){
+            for(int j=0; j<9; j++){
+                if(board[i][j] == ' '){
+                    try {
+                        emptyCell = new Position(j + 1, i + 1);
+                    }catch(InvalidPositionException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        if(emptyCell == null){
+            return true;
+        }
+
+        for(int i=1; i<10; i++){
+            try {
+                Move m = new Move(i, emptyCell);
+                if(isValid(m)){
+                    board[m.getPosition().getY()-1][m.getPosition().getX()-1] = String.valueOf(m.getNumber()).charAt(0);
+                    if(solve()){
+                        return true;
+                    }
+                    board[m.getPosition().getY()-1][m.getPosition().getX()-1] = ' ';
+                }
+            }catch(InvalidNumberException e){
+                e.printStackTrace();
+            }
+
+        }
+
+        return false;
+    }
+
+    public boolean isComplete(){
+
+        // check for spaces
+        for(int i=0; i<9; i++){
+            for(int j=0; j<9; j++){
+                if(board[i][j] == ' '){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     // Takes a move and returns boolean whether allowed or not
-    public boolean isValid(Move move){
+    private boolean isValid(Move move){
 
         // check if already filled in
         if(board[move.getPosition().getY() - 1][move.getPosition().getX() - 1] != ' '){

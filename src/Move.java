@@ -3,9 +3,9 @@ public class Move {
     private int number;
     private Position position;
 
-    public Move(int data, Position position) throws InvalidPositionException{
+    public Move(int data, Position position) throws InvalidNumberException{
         if(data < 1 || data > 9){
-            throw new InvalidPositionException("Invalid number " + data + " is not between 1-9");
+            throw new InvalidNumberException("Invalid number " + data + " is not between 1-9");
         } else {
             this.number = data;
             this.position = position;
