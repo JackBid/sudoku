@@ -3,18 +3,9 @@ import javafx.geometry.Pos;
 import java.util.ArrayList;
 
 public class Board {
-
-    private char[][] board = {{'6','1',' ',' ',' ',' ',' ',' ',' '},
-                              {' ','4','8',' ','5','3','1',' ','2'},
-                              {' ',' ','3',' ','8',' ',' ','4','5'},
-                              {'4',' ',' ',' ','9',' ','5',' ','6'},
-                              {' ','5','7',' ','3',' ','2',' ',' '},
-                              {'3',' ',' ','5',' ','8',' ','1',' '},
-                              {' ','3','9',' ',' ',' ','6','2','1'},
-                              {'7','2',' ',' ','6','5','3',' ',' '},
-                              {'8',' ','4','3',' ','2',' ','5','9'},};
-
     /*
+
+
     private char[][] board = {{'1','3','2','5','6','7','9','4','8'},
                               {'5','4','6','3','8','9','2','1','7'},
                               {'9','7','8','2','4','1','6','3','5'},
@@ -24,7 +15,18 @@ public class Board {
                               {'8','5','7','1','2','3','4','6','9'},
                               {'6','9','1','7','5','4','3','8','2'},
                               {'4','2','3','8','9','6',' ',' ','1'},};
+
+
     */
+    private char[][] board = {{'6','1',' ',' ',' ',' ',' ',' ',' '},
+            {' ','4','8',' ','5','3','1',' ','2'},
+            {' ',' ','3',' ','8',' ',' ','4','5'},
+            {'4',' ',' ',' ','9',' ','5',' ','6'},
+            {' ','5','7',' ','3',' ','2',' ',' '},
+            {'3',' ',' ','5',' ','8',' ','1',' '},
+            {' ','3','9',' ',' ',' ','6','2','1'},
+            {'7','2',' ',' ','6','5','3',' ',' '},
+            {'8',' ','4','3',' ','2',' ','5','9'},};
 
     public void makeMove(Move move){
         if(isValid(move)){
@@ -34,29 +36,19 @@ public class Board {
 
     public boolean solve(){
 
-        Position emptyCell = null;
-
-        //Find first empty cell
-        for(int i=0; i<9; i++){
-            for(int j=0; j<9; j++){
-                if(board[i][j] == ' '){
-                    try {
-                        emptyCell = new Position(j + 1, i + 1);
-                    }catch(InvalidPositionException e){
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
+        Position emptyCell = findFirstEmptyCell();
         if(emptyCell == null){
             return true;
         }
+        System.out.println((emptyCell));
 
+        //try numbers 1-9
         for(int i=1; i<10; i++){
             try {
                 Move m = new Move(i, emptyCell);
                 if(isValid(m)){
                     board[m.getPosition().getY()-1][m.getPosition().getX()-1] = String.valueOf(m.getNumber()).charAt(0);
+                    print();
                     if(solve()){
                         return true;
                     }
@@ -69,6 +61,25 @@ public class Board {
         }
 
         return false;
+    }
+
+    private Position findFirstEmptyCell(){
+        Position emptyCell;
+
+        //Find first empty cell
+        for(int i=0; i<9; i++){
+            for(int j=0; j<9; j++){
+                if(board[i][j] == ' '){
+                    try {
+                        emptyCell = new Position(j + 1, i + 1);
+                        return emptyCell;
+                    }catch(InvalidPositionException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public boolean isComplete(){
@@ -120,6 +131,7 @@ public class Board {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -133,8 +145,11 @@ public class Board {
                          board[y+2][x],board[y+2][x+1],board[y+2][x+2],};
 
         for(char c:squares){
-            if(c == number){
+            //System.out.println(String.valueOf(c) + "  " + String.valueOf(c).length() + "  ");
+            if(!String.valueOf(c).equals(" ")){
+             if(Integer.parseInt(String.valueOf(c)) == number){
                 return false;
+             }
             }
         }
         return true;

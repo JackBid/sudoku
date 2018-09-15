@@ -22,7 +22,7 @@ public class Game {
             System.out.println("");
             board.print();
             running = false;
-            /*
+/*
             try {
                 Player p = new Player();
                 Move m = p.getMove();
@@ -32,8 +32,8 @@ public class Game {
                 }
             } catch (Exception e) {
                 e.getMessage();
-            }
-            */
+            }*/
+
         }
     }
 
