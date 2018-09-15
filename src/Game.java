@@ -16,7 +16,7 @@ public class Game {
 
             System.out.println("");
             board.print();
-
+            board.load();
             board.solve();
 
             System.out.println("");

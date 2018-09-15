@@ -1,6 +1,8 @@
 import javafx.geometry.Pos;
 
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.File;
 
 public class Board {
     /*
@@ -40,7 +42,6 @@ public class Board {
         if(emptyCell == null){
             return true;
         }
-        System.out.println((emptyCell));
 
         //try numbers 1-9
         for(int i=1; i<10; i++){
@@ -48,7 +49,6 @@ public class Board {
                 Move m = new Move(i, emptyCell);
                 if(isValid(m)){
                     board[m.getPosition().getY()-1][m.getPosition().getX()-1] = String.valueOf(m.getNumber()).charAt(0);
-                    print();
                     if(solve()){
                         return true;
                     }
@@ -145,7 +145,6 @@ public class Board {
                          board[y+2][x],board[y+2][x+1],board[y+2][x+2],};
 
         for(char c:squares){
-            //System.out.println(String.valueOf(c) + "  " + String.valueOf(c).length() + "  ");
             if(!String.valueOf(c).equals(" ")){
              if(Integer.parseInt(String.valueOf(c)) == number){
                 return false;
@@ -153,6 +152,27 @@ public class Board {
             }
         }
         return true;
+    }
+
+    public void load(){
+
+
+        File file = new File("C://Users//Jack biddlecombe//Documents//Code//sudoku//src//board.txt");
+        int i =0;
+        try {
+            Scanner sc = new Scanner(file);
+            while(sc.hasNextLine()){
+                StringBuilder line = new StringBuilder(sc.nextLine());
+                while(line.length() < 9){
+                    line.append(" ");
+                }
+                board[i] = line.toString().toCharArray();
+                i++;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     public void print(){
