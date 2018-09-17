@@ -169,6 +169,10 @@ public class Board {
                 board[i] = line.toString().toCharArray();
                 i++;
             }
+            while(i<9){
+                board[i] = new char[]{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+                i++;
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
