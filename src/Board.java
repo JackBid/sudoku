@@ -20,6 +20,7 @@ public class Board {
 
 
     */
+    // default board to load if text file fails
     private char[][] board = {{'6','1',' ',' ',' ',' ',' ',' ',' '},
             {' ','4','8',' ','5','3','1',' ','2'},
             {' ',' ','3',' ','8',' ',' ','4','5'},
@@ -30,28 +31,41 @@ public class Board {
             {'7','2',' ',' ','6','5','3',' ',' '},
             {'8',' ','4','3',' ','2',' ','5','9'},};
 
+    // takes a move object and playes that move if it is valid
     public void makeMove(Move move){
         if(isValid(move)){
             board[move.getPosition().getY()-1][move.getPosition().getX()-1] = String.valueOf(move.getNumber()).charAt(0);
         }
     }
 
+    // recursively solves the current board
+    // returns false if cant find a valid move - this is used to backtrack
     public boolean solve(){
 
+        // find the first empty cell
         Position emptyCell = findFirstEmptyCell();
+
+        // if no empty cell can be found board is complete so return true
         if(emptyCell == null){
             return true;
         }
 
-        //try numbers 1-9
+        // iterate through numbers 1-9 to see if they are valid in the emptyCell position
         for(int i=1; i<10; i++){
+            // creating a Move object may throw exception so surround with try catch block
             try {
                 Move m = new Move(i, emptyCell);
+                // if the move is valid
                 if(isValid(m)){
+                    // accept the move
                     board[m.getPosition().getY()-1][m.getPosition().getX()-1] = String.valueOf(m.getNumber()).charAt(0);
+
+                    // now that the move has been made, make a recursive call to see if this board can be solved
                     if(solve()){
                         return true;
                     }
+
+                    // if the board can't be solved then set the location back to being empty
                     board[m.getPosition().getY()-1][m.getPosition().getX()-1] = ' ';
                 }
             }catch(InvalidNumberException e){
