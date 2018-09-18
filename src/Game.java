@@ -56,7 +56,12 @@ public class Game {
 
     private void computer(){
         System.out.println("");
-        board.load();
+        //board.load();
+        try{
+            board.generate();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         board.print();
 
         board.solve();

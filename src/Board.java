@@ -3,6 +3,7 @@ import javafx.geometry.Pos;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Board {
     /*
@@ -20,22 +21,42 @@ public class Board {
 
 
     */
-    // default board to load if text file fails
-    private char[][] board = {{'6','1',' ',' ',' ',' ',' ',' ',' '},
-            {' ','4','8',' ','5','3','1',' ','2'},
-            {' ',' ','3',' ','8',' ',' ','4','5'},
-            {'4',' ',' ',' ','9',' ','5',' ','6'},
-            {' ','5','7',' ','3',' ','2',' ',' '},
-            {'3',' ',' ','5',' ','8',' ','1',' '},
-            {' ','3','9',' ',' ',' ','6','2','1'},
-            {'7','2',' ',' ','6','5','3',' ',' '},
-            {'8',' ','4','3',' ','2',' ','5','9'},};
+    private char[][] board = {{' ',' ',' ',' ',' ',' ',' ',' ',' '},
+                            {' ',' ',' ',' ',' ',' ',' ',' ',' '},
+                            {' ',' ',' ',' ',' ',' ',' ',' ',' '},
+                            {' ',' ',' ',' ',' ',' ',' ',' ',' '},
+                            {' ',' ',' ',' ',' ',' ',' ',' ',' '},
+                            {' ',' ',' ',' ',' ',' ',' ',' ',' '},
+                            {' ',' ',' ',' ',' ',' ',' ',' ',' '},
+                            {' ',' ',' ',' ',' ',' ',' ',' ',' '},
+                            {' ',' ',' ',' ',' ',' ',' ',' ',' '}};
 
     // takes a move object and playes that move if it is valid
     public void makeMove(Move move){
         if(isValid(move)){
             board[move.getPosition().getY()-1][move.getPosition().getX()-1] = String.valueOf(move.getNumber()).charAt(0);
         }
+    }
+
+    // generates solvable board but may be multiple solutions
+    public void generate() throws InvalidPositionException, InvalidNumberException{
+        int startingNum = 17;
+
+        for(int i=0; i<startingNum; i++) {
+            Move m = null;
+            while (m == null) {
+                int x = ThreadLocalRandom.current().nextInt(1, 9 + 1);
+                int y = ThreadLocalRandom.current().nextInt(1, 9 + 1);
+                int num = ThreadLocalRandom.current().nextInt(1, 9 + 1);
+                m = new Move(num, new Position(x, y));
+                if (isValid(m)) {
+                    board[m.getPosition().getY() - 1][m.getPosition().getX() - 1] = String.valueOf(m.getNumber()).charAt(0);
+                } else {
+                    m = null;
+                }
+            }
+        }
+
     }
 
     // recursively solves the current board
