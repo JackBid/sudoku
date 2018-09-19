@@ -9,6 +9,10 @@ public class Game {
     public static void main(String[] args){
 
         Game game = new Game();
+        game.getBoard().load();
+
+        Window w = new Window(game);
+        w.start();
         game.startMenu();
 
     }
@@ -37,7 +41,7 @@ public class Game {
 
     private void play(){
         System.out.println("");
-        board.load();
+        //board.load();
 
         while(running) {
             board.print();
@@ -70,6 +74,7 @@ public class Game {
         board.print();
     }
 
+
     private void complete(){
         running = false;
         System.out.println("");
@@ -77,4 +82,7 @@ public class Game {
         System.out.println("Sudoku Complete.");
     }
 
+    public Board getBoard(){
+        return board;
+    }
 }

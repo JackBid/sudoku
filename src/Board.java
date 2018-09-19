@@ -21,7 +21,7 @@ public class Board {
 
 
     */
-    private char[][] board = {{' ',' ',' ',' ',' ',' ',' ',' ',' '},
+    private char[][] grid = {{' ',' ',' ',' ',' ',' ',' ',' ',' '},
                             {' ',' ',' ',' ',' ',' ',' ',' ',' '},
                             {' ',' ',' ',' ',' ',' ',' ',' ',' '},
                             {' ',' ',' ',' ',' ',' ',' ',' ',' '},
@@ -34,7 +34,7 @@ public class Board {
     // takes a move object and playes that move if it is valid
     public void makeMove(Move move){
         if(isValid(move)){
-            board[move.getPosition().getY()-1][move.getPosition().getX()-1] = String.valueOf(move.getNumber()).charAt(0);
+            grid[move.getPosition().getY()-1][move.getPosition().getX()-1] = String.valueOf(move.getNumber()).charAt(0);
         }
     }
 
@@ -50,7 +50,7 @@ public class Board {
                 int num = ThreadLocalRandom.current().nextInt(1, 9 + 1);
                 m = new Move(num, new Position(x, y));
                 if (isValid(m)) {
-                    board[m.getPosition().getY() - 1][m.getPosition().getX() - 1] = String.valueOf(m.getNumber()).charAt(0);
+                    grid[m.getPosition().getY() - 1][m.getPosition().getX() - 1] = String.valueOf(m.getNumber()).charAt(0);
                 } else {
                     m = null;
                 }
@@ -79,7 +79,7 @@ public class Board {
                 // if the move is valid
                 if(isValid(m)){
                     // accept the move
-                    board[m.getPosition().getY()-1][m.getPosition().getX()-1] = String.valueOf(m.getNumber()).charAt(0);
+                    grid[m.getPosition().getY()-1][m.getPosition().getX()-1] = String.valueOf(m.getNumber()).charAt(0);
 
                     // now that the move has been made, make a recursive call to see if this board can be solved
                     if(solve()){
@@ -87,7 +87,7 @@ public class Board {
                     }
 
                     // if the board can't be solved then set the location back to being empty
-                    board[m.getPosition().getY()-1][m.getPosition().getX()-1] = ' ';
+                    grid[m.getPosition().getY()-1][m.getPosition().getX()-1] = ' ';
                 }
             }catch(InvalidNumberException e){
                 e.printStackTrace();
@@ -104,7 +104,7 @@ public class Board {
         //Find first empty cell
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
-                if(board[i][j] == ' '){
+                if(grid[i][j] == ' '){
                     try {
                         emptyCell = new Position(j + 1, i + 1);
                         return emptyCell;
@@ -122,7 +122,7 @@ public class Board {
         // check for spaces
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
-                if(board[i][j] == ' '){
+                if(grid[i][j] == ' '){
                     return false;
                 }
             }
@@ -135,7 +135,7 @@ public class Board {
     private boolean isValid(Move move){
 
         // check if already filled in
-        if(board[move.getPosition().getY() - 1][move.getPosition().getX() - 1] != ' '){
+        if(grid[move.getPosition().getY() - 1][move.getPosition().getX() - 1] != ' '){
             return false;
         }
 
@@ -154,7 +154,7 @@ public class Board {
         // check row
         for(int i=0; i<9; i++){
             // if number in row
-            if(String.valueOf(move.getNumber()).charAt(0) == board[move.getPosition().getY() - 1][i]){
+            if(String.valueOf(move.getNumber()).charAt(0) == grid[move.getPosition().getY() - 1][i]){
                 return false;
             }
         }
@@ -162,7 +162,7 @@ public class Board {
         // check column
         for(int i=0; i<9; i++){
             // if number in column
-            if(String.valueOf(move.getNumber()).charAt(0) == board[i][move.getPosition().getX() - 1]){
+            if(String.valueOf(move.getNumber()).charAt(0) == grid[i][move.getPosition().getX() - 1]){
                 return false;
             }
         }
@@ -175,9 +175,9 @@ public class Board {
         int x = topLeft.getX()-1;
         int y = topLeft.getY()-1;
 
-       char[] squares = {board[y][x],board[y][x+1],board[y][x+2],
-                         board[y+1][x],board[y+1][x+1],board[y+1][x+2],
-                         board[y+2][x],board[y+2][x+1],board[y+2][x+2],};
+       char[] squares = {grid[y][x],grid[y][x+1],grid[y][x+2],
+                         grid[y+1][x],grid[y+1][x+1],grid[y+1][x+2],
+                         grid[y+2][x],grid[y+2][x+1],grid[y+2][x+2],};
 
         for(char c:squares){
             if(!String.valueOf(c).equals(" ")){
@@ -201,11 +201,11 @@ public class Board {
                 while(line.length() < 9){
                     line.append(" ");
                 }
-                board[i] = line.toString().toCharArray();
+                grid[i] = line.toString().toCharArray();
                 i++;
             }
             while(i<9){
-                board[i] = new char[]{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+                grid[i] = new char[]{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
                 i++;
             }
         }catch (Exception e){
@@ -221,9 +221,9 @@ public class Board {
             StringBuilder row = new StringBuilder(i + 1 + " | ");
             for(int j=0; j<9; j++){
                 if(j == 2 || j == 5 || j == 8){
-                    row.append(board[i][j]).append(" | ");
+                    row.append(grid[i][j]).append(" | ");
                 }else {
-                    row.append(board[i][j]).append("  ");
+                    row.append(grid[i][j]).append("  ");
                 }
             }
             System.out.println(row);
@@ -233,5 +233,7 @@ public class Board {
         }
         System.out.println(  "  +-----------------------------+");
     }
-
+    public char[][] getGrid(){
+        return grid;
+    }
 }
