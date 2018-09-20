@@ -5,16 +5,18 @@ public class Game {
     private boolean running = true;
     private Board board = new Board();
     private Player player = new Player();
+    private Window window = new Window();
 
     public static void main(String[] args){
 
         Game game = new Game();
-        game.getBoard().load();
 
-        Window w = new Window(game);
-        w.start();
-        game.startMenu();
+    }
 
+    private Game(){
+        this.getBoard().load();
+        window.start();
+        this.startMenu();
     }
 
     private void startMenu(){
@@ -41,10 +43,12 @@ public class Game {
 
     private void play(){
         System.out.println("");
+        window.display(board.getGrid());
         //board.load();
 
         while(running) {
             board.print();
+            window.display(board.getGrid());
             try {
                 Player p = new Player();
                 Move m = p.getMove();
@@ -82,7 +86,7 @@ public class Game {
         System.out.println("Sudoku Complete.");
     }
 
-    public Board getBoard(){
+    private Board getBoard(){
         return board;
     }
 }

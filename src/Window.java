@@ -1,13 +1,14 @@
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
+import java.awt.*;
 
 public class Window extends Thread {
 
     private Game game;
     private JFrame myFrame;
+    private JPanel panel = new JPanel();
 
-    public Window(Game game){
-        this.game = game;
+    public Window(){
     }
 
     public void run(){
@@ -15,20 +16,28 @@ public class Window extends Thread {
 
         myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        myFrame.setSize(500,500);
+        myFrame.setPreferredSize(new Dimension(500,500));
+        myFrame.setResizable(false);
+        myFrame.pack();
         myFrame.setVisible(true);
-        display(game.getBoard().getGrid());
+        panel.setSize(500,500);
+        GridLayout layout = new GridLayout(9,9, 0, 0);
+
+        panel.setLayout(layout);
+
     }
 
-    private void display(char[][] grid){
-        StringBuilder data = new StringBuilder();
-        for(int i=0; i<9; i++){
-            for(int j=0; j<9; j++){
-                data.append(grid[i][j]);
-            }
-            data.append("|");
+    public void display(char[][] grid){
+
+
+        panel.removeAll();
+        for(int i=0; i<81; i++){
+            JLabel j = new JLabel(String.valueOf(grid[(int)Math.floor(i/9)][i-9*(int)Math.floor(i/9)]), SwingConstants.CENTER);
+            j.setBorder(BorderFactory.createLineBorder(Color.black));
+            panel.add(j);
+
         }
-        JLabel l = new JLabel(data.toString());
-        myFrame.add(l);
+        myFrame.add(panel);
+        myFrame.pack();
     }
 }
